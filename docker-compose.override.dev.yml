@@ -1,0 +1,11 @@
+services:
+
+  app:
+    build:
+      target: development
+    image: nicholasodonnell/gameday:dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+      - /app/node_modules

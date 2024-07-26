@@ -1,0 +1,23 @@
+# compiled output
+dist
+
+# node
+.cache
+node_modules
+
+# logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# config
+config/*
+!config/.gitkeep
+
+# docker
+.env
+docker-compose.override.yml

@@ -1,0 +1,13 @@
+# compiled output
+dist
+node_modules
+
+# config
+config
+
+# docker
+.env
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+docker-compose.override.dev.yml

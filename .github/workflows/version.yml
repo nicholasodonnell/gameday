@@ -1,0 +1,57 @@
+name: Version
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        description: 'Next version (manually set)'
+        required: false
+
+    outputs:
+      next_version:
+        description: 'Next version'
+        value: ${{ jobs.version.outputs.next_version }}
+
+      previous_version:
+        description: 'Previous version'
+        value: ${{ jobs.version.outputs.previous_version }}
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+
+  version:
+    name: Version
+    runs-on: ubuntu-latest
+
+    outputs:
+      next_version: ${{ steps.next_version.outputs.value }}
+      previous_version: ${{ steps.previous_version.outputs.value }}
+
+    steps:
+
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+
+      - name: Get current version
+        id: next_version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            value=${{ inputs.version }}
+          else
+            value=$(node -p "require('./package.json').version")
+          fi
+          echo "next_version=$value"
+          echo "value=$value" >> $GITHUB_OUTPUT
+
+      - name: Get previous version
+        id: previous_version
+        run: |
+          git fetch --tags origin
+          value=$(git tag --sort=committerdate | sed 's/^v//' | tail -1)
+          echo "previous_version=$value"
+          echo "value=$value" >> $GITHUB_OUTPUT

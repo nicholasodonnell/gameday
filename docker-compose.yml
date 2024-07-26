@@ -1,0 +1,16 @@
+version: "3.5"
+services:
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    image: nicholasodonnell/gameday:latest
+    container_name: gameday
+    environment:
+      - TZ=America/New_York
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config:/app/config

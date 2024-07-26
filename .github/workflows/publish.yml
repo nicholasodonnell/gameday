@@ -1,0 +1,50 @@
+name: 'Publish'
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish'
+        required: false
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+
+  version:
+    name: Version
+    uses: ./.github/workflows/version.yml
+    with:
+      version: ${{ inputs.version }}
+
+  publish_github:
+    name: Publish to GitHub
+    uses: ./.github/workflows/publish-github.yml
+    needs: [version]
+    if: ${{ (needs.version.outputs.next_version != needs.version.outputs.previous_version) && (github.ref == 'refs/heads/main') }}
+    secrets: inherit
+    with:
+      version: ${{ needs.version.outputs.next_version }}
+
+  publish_docker:
+    name: Publish to Docker Hub
+    uses: ./.github/workflows/publish-docker.yml
+    needs: [version]
+    if: ${{ needs.version.outputs.next_version != needs.version.outputs.previous_version }}
+    secrets: inherit
+    with:
+      version: ${{ needs.version.outputs.next_version }}
