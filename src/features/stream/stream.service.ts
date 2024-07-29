@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Bitrate, BlackedOutException, Stream, StreamEntity, StreamException } from './types'
 
 import { MediaGatewayService, Playback } from '@/clients/mediagateway'
+import { ApplicationException } from '@/common/errors'
 import { Token } from '@/features/auth'
 import { Game } from '@/features/game'
 import { Session } from '@/features/session'
@@ -109,7 +110,7 @@ export class StreamService {
         url: stream.url,
       }
     } catch (cause) {
-      if (cause instanceof Error && cause.message.includes('blackout')) {
+      if (cause instanceof ApplicationException && cause.getFullMessage().includes('blacked out')) {
         this.logger.warn({ ...game }, 'Game is blacked out')
         throw new BlackedOutException('Game is blacked out', { ...game })
       }

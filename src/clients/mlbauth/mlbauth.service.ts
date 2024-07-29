@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse } from 'axios'
 
-import { HttpException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import axios, { AxiosError } from 'axios'
 
@@ -43,12 +43,9 @@ export class MlbAuthService {
 
       return response.data
     } catch (cause) {
-      if (cause instanceof AxiosError) {
-        throw new HttpException(`Failed to fetch grant`, cause.response?.status ?? 500, { cause })
-      }
-
       throw new ApplicationException(`Failed to fetch grant`, {
         cause,
+        status: cause instanceof AxiosError ? cause.response?.status : undefined,
       })
     }
   }
