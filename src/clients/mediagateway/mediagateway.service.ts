@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse } from 'axios'
 
-import { HttpException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import axios, { AxiosError } from 'axios'
 
@@ -102,16 +102,9 @@ export class MediaGatewayService {
 
       return data.initPlaybackSession
     } catch (cause) {
-      if (cause instanceof AxiosError) {
-        throw new HttpException(`Failed to init playback session`, cause.response?.status ?? 500, { cause })
-      }
-
-      if (cause instanceof HttpException) {
-        throw cause
-      }
-
       throw new ApplicationException(`Failed to init playback session`, {
         cause,
+        status: cause instanceof AxiosError ? cause.response?.status : undefined,
       })
     }
   }
@@ -173,12 +166,9 @@ export class MediaGatewayService {
 
       return data.initSession
     } catch (cause) {
-      if (cause instanceof AxiosError) {
-        throw new HttpException(`Failed to initialize session`, cause.response?.status ?? 500, { cause })
-      }
-
       throw new ApplicationException(`Failed to initialize session`, {
         cause,
+        status: cause instanceof AxiosError ? cause.response?.status : undefined,
       })
     }
   }
