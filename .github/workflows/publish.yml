@@ -34,7 +34,7 @@ jobs:
   publish_github:
     name: Publish to GitHub
     uses: ./.github/workflows/publish-github.yml
-    needs: [version]
+    needs: [lint, build, version]
     if: ${{ (needs.version.outputs.next_version != needs.version.outputs.previous_version) && (github.ref == 'refs/heads/main') }}
     secrets: inherit
     with:
@@ -43,7 +43,7 @@ jobs:
   publish_docker:
     name: Publish to Docker Hub
     uses: ./.github/workflows/publish-docker.yml
-    needs: [version]
+    needs: [lint, build, version]
     if: ${{ needs.version.outputs.next_version != needs.version.outputs.previous_version }}
     secrets: inherit
     with:

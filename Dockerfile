@@ -9,8 +9,11 @@ RUN \
   # add dependencies
   apt-get update \
   && apt-get install -y \
+    g++ \
+    make \
     openssl \
     procps \
+    python3 \
     tzdata \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
