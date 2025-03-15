@@ -1,4 +1,4 @@
-import { Injectable, Logger, StreamableFile } from '@nestjs/common'
+import { Injectable, StreamableFile } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 import { PlaylistTemplateConfig } from './types'
@@ -11,8 +11,6 @@ import { Team, TeamService } from '@/features/team'
 
 @Injectable()
 export class PlaylistService {
-  private readonly logger = new Logger(PlaylistService.name)
-
   constructor(
     private readonly auth: AuthService,
     private readonly config: ConfigService,
@@ -22,30 +20,29 @@ export class PlaylistService {
     private readonly team: TeamService,
   ) {}
 
-  private async initStream(game: Game): Promise<Stream> {
-    const token: Token = (await this.auth.getToken()) ?? (await this.auth.createToken())
-    const session: Session = (await this.session.getSession(token)) ?? (await this.session.createSession(token))
+  public async getLogoForTeam(team: Team): Promise<StreamableFile> {
+    const logoBuffer: Buffer = await this.team.getLogo(team)
 
-    return await this.stream.createStream(game, session, token)
+    return new StreamableFile(new Uint8Array(logoBuffer))
   }
 
-  public getConfig(): PlaylistTemplateConfig {
+  public getPlaylistTemplateConfig(): PlaylistTemplateConfig {
     return {
       APP_URL: this.config.getOrThrow<string>('APP_URL'),
     }
   }
 
-  public async getLogo(team: Team): Promise<StreamableFile> {
-    const buf: Buffer = await this.team.getLogo(team)
-
-    return new StreamableFile(buf)
-  }
-
-  public async getTeam(team: Team): Promise<string> {
-    this.logger.log(`Attempting to serve stream for ${team}...`)
-
+  public async getStreamForTeam(team: Team): Promise<string> {
     const game: Game = await this.game.getLiveGame(team)
-    const stream: Stream = (await this.stream.getCachedStream(game)) ?? (await this.initStream(game))
+    const cachedStream: Stream | null = await this.stream.getCachedStream(game)
+
+    if (cachedStream) {
+      return cachedStream.url
+    }
+
+    const token: Token = (await this.auth.getToken()) ?? (await this.auth.createToken())
+    const session: Session = (await this.session.getSession(token)) ?? (await this.session.createSession(token))
+    const stream: Stream = await this.stream.createStream(game, session, token)
 
     return stream.url
   }

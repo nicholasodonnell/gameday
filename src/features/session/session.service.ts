@@ -39,20 +39,15 @@ export class SessionService {
   }
 
   public async createSession(token: Token): Promise<Session> {
-    this.logger.log(`Creating new session...`)
-
     try {
       const mlbSession: MLBSession = await this.mediaGateway.initSession(token.id)
-
-      this.logger.debug({ ...mlbSession }, `Initalized session from the MLB`)
-
       const session: SessionEntity = await this.insertSession({
         device_id: mlbSession.deviceId,
         id: mlbSession.sessionId,
         token_id: token.id,
       })
 
-      this.logger.debug({ ...session }, `Created new session`)
+      this.logger.debug({ session }, `Created new session`)
 
       return {
         deviceId: session.device_id,
@@ -73,7 +68,7 @@ export class SessionService {
         return null
       }
 
-      this.logger.debug({ ...session }, `Using existing session`)
+      this.logger.debug({ session }, `Using existing session`)
 
       return {
         deviceId: session.device_id,

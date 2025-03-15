@@ -1,3 +1,6 @@
+import type { Program } from './program.interface'
+
 export type GuideTemplate = {
-  programs: string
+  APP_URL: string
+  programs: Program[]
 }

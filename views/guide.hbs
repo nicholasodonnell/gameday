@@ -3,93 +3,135 @@
 <tv>
   <channel id="mlb-ari">
     <display-name>Arizona Diamondbacks</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/ARI.png" />
   </channel>
   <channel id="mlb-atl">
     <display-name>Atlanta Braves</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/ATL.png" />
   </channel>
   <channel id="mlb-bal">
     <display-name>Baltimore Orioles</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/BAL.png" />
   </channel>
   <channel id="mlb-bos">
     <display-name>Boston Red Sox</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/BOS.png" />
   </channel>
   <channel id="mlb-chc">
     <display-name>Chicago Cubs</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/CHC.png" />
   </channel>
   <channel id="mlb-cin">
     <display-name>Cincinnati Reds</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/CIN.png" />
   </channel>
   <channel id="mlb-cle">
     <display-name>Cleveland Guardians</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/CLE.png" />
   </channel>
   <channel id="mlb-col">
     <display-name>Colorado Rockies</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/COL.png" />
   </channel>
   <channel id="mlb-cws">
     <display-name>Chicago White Sox</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/CWS.png" />
   </channel>
   <channel id="mlb-det">
     <display-name>Detroit Tigers</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/DET.png" />
   </channel>
   <channel id="mlb-hou">
     <display-name>Houston Astros</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/HOU.png" />
   </channel>
   <channel id="mlb-kcr">
     <display-name>Kansas City Royals</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/KCR.png" />
   </channel>
   <channel id="mlb-laa">
     <display-name>Los Angeles Angels</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/LAA.png" />
   </channel>
   <channel id="mlb-lad">
     <display-name>Los Angeles Dodgers</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/LAD.png" />
   </channel>
   <channel id="mlb-mia">
     <display-name>Miami Marlins</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/MIA.png" />
   </channel>
   <channel id="mlb-mil">
     <display-name>Milwaukee Brewers</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/MIL.png" />
   </channel>
   <channel id="mlb-min">
     <display-name>Minnesota Twins</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/MIN.png" />
   </channel>
   <channel id="mlb-nym">
     <display-name>New York Mets</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/NYM.png" />
   </channel>
   <channel id="mlb-nyy">
     <display-name>New York Yankees</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/NYY.png" />
   </channel>
   <channel id="mlb-oak">
     <display-name>Oakland Athletics</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/OAK.png" />
   </channel>
   <channel id="mlb-phi">
     <display-name>Philadelphia Phillies</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/PHI.png" />
   </channel>
   <channel id="mlb-pit">
     <display-name>Pittsburgh Pirates</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/PIT.png" />
   </channel>
   <channel id="mlb-sdp">
     <display-name>San Diego Padres</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/SDP.png" />
   </channel>
   <channel id="mlb-sea">
     <display-name>Seattle Mariners</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/SEA.png" />
   </channel>
   <channel id="mlb-sfg">
     <display-name>San Francisco Giants</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/SFG.png" />
   </channel>
   <channel id="mlb-stl">
     <display-name>St. Louis Cardinals</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/STL.png" />
   </channel>
   <channel id="mlb-tbr">
     <display-name>Tampa Bay Rays</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/TBR.png" />
   </channel>
   <channel id="mlb-tex">
     <display-name>Texas Rangers</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/TEX.png" />
   </channel>
   <channel id="mlb-tor">
     <display-name>Toronto Blue Jays</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/TOR.png" />
   </channel>
   <channel id="mlb-was">
     <display-name>Washington Nationals</display-name>
+    <icon src="{{ APP_URL }}/playlist/logo/WAS.png" />
   </channel>
-  {{{ programs }}}
+  {{#each programs}}
+    <programme start="{{ start }}" stop="{{ stop }}" channel="mlb-{{ lowercase team }}">
+      <title>{{ game.title }}</title>
+      <desc lang="en">{{ game.description }}</desc>
+      <category lang="en">Baseball</category>
+      <category lang="en">MLB</category>
+      <category lang="en">Sports event</category>
+      <category lang="en">Sports</category>
+      <new />
+      <live />
+      <icon src="{{ ../APP_URL }}/playlist/logo/{{ team }}.png" />
+    </programme>
+  {{/each}}
 </tv>

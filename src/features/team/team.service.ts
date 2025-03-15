@@ -17,7 +17,7 @@ export class TeamService {
       throw new TeamNotFoundException()
     }
 
-    this.logger.log({ teamId }, `Got logo for ${team}`)
+    this.logger.debug({ team, teamId }, `Got logo for ${team}`)
 
     // TODO: Cache team's logo for a period of time
     return await this.mlbStatic.fetchLogo(teamId)

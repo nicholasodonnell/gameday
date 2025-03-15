@@ -3,6 +3,7 @@ import { Team } from '@/features/team'
 export interface Game {
   approximateEndDate: Date
   blackedOut: boolean
+  description: string
   freeGame: boolean
   mediaFeedType: 'AWAY' | 'HOME'
   mediaId: string

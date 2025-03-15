@@ -71,8 +71,6 @@ export class StreamService {
   }
 
   public async createStream(game: Game, session: Session, token: Token): Promise<Stream> {
-    this.logger.log(`Generating stream...`)
-
     try {
       const bitrate: Bitrate = this.config.getOrThrow<Bitrate>('BITRATE')
       const playback: Playback = await this.mediaGateway.initPlaybackSession({
@@ -99,7 +97,7 @@ export class StreamService {
         url,
       })
 
-      this.logger.debug({ ...stream }, `Cached stream`)
+      this.logger.log({ game, stream }, `Got stream for ${game.title}`)
 
       return {
         bitrate: stream.bitrate,
@@ -111,7 +109,7 @@ export class StreamService {
       }
     } catch (cause) {
       if (cause instanceof ApplicationException && cause.getFullMessage().includes('blacked out')) {
-        this.logger.warn({ ...game }, 'Game is blacked out')
+        this.logger.warn({ game }, `${game.title} is blacked out`)
         throw new BlackedOutException('Game is blacked out', { ...game })
       }
 
@@ -132,12 +130,12 @@ export class StreamService {
       const stream: StreamEntity | undefined = await this.selectStreamByMediaId(game.mediaId)
 
       if (!stream) {
-        this.logger.debug({ game }, 'Cached stream not found')
+        this.logger.debug({ game }, `Cached stream not found for ${game.title}`)
 
         return null
       }
 
-      this.logger.debug({ ...stream, game }, `Found cached stream`)
+      this.logger.log({ game, stream }, `Got cached stream for ${game.title}`)
 
       return {
         bitrate: stream.bitrate,
@@ -148,7 +146,7 @@ export class StreamService {
         url: stream.url,
       }
     } catch (cause) {
-      throw new StreamException('Failed to get cached stream', { cause })
+      throw new StreamException(`Failed to get cached stream`, { cause })
     }
   }
 }

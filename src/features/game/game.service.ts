@@ -26,8 +26,6 @@ export class GameService {
       const formattedStartDate: string = format(zonedStartDate, 'yyyy-MM-dd')
       const formattedEndDate: string = format(zonedEndDate, 'yyyy-MM-dd')
 
-      this.logger.log({ endDate: formattedEndDate, startDate: formattedStartDate, team }, `Searching for games...`)
-
       if (!teamId) {
         throw new TeamNotFoundException()
       }
@@ -36,11 +34,12 @@ export class GameService {
 
       this.logger.debug(
         { endDate: formattedEndDate, startDate: formattedStartDate, teamId },
-        `Received ${epgs?.length} epg(s) from MLB`,
+        `Received ${epgs?.length} epg(s) from MLB for ${team}`,
       )
 
       return (
         epgs.reduce<Game[]>((games, { gameData, videoFeeds }) => {
+          // target video feeds from the desired team's station (e.g. MASN for BAL)
           const targetVideoFeeds: VideoFeed[] = videoFeeds.filter((videoFeed) => videoFeed.mediaFeedSubType === teamId)
           const homeTeamId: TeamId = gameData.home.teamId.toString() as TeamId
           const homeTeam: Team = Object.keys(TeamId)[Object.values(TeamId).indexOf(homeTeamId)] as Team
@@ -54,6 +53,7 @@ export class GameService {
           const epgGames = targetVideoFeeds.map<Game>((videoFeed) => ({
             approximateEndDate,
             blackedOut: videoFeed.blackedOut,
+            description: `${TeamName[awayTeam]} take on ${TeamName[homeTeam]} with first pitch at ${format(zonedStartDate, 'h:mm a')}`,
             freeGame: videoFeed.freeGame,
             mediaFeedType: videoFeed.mediaFeedType as Game['mediaFeedType'],
             mediaId: videoFeed.mediaId,
@@ -80,25 +80,24 @@ export class GameService {
     try {
       const today: Date = new Date(Date.now())
       const tz: string = this.config.getOrThrow<string>('TZ')
-      const formattedDate: string = format(toZonedTime(today, tz), 'yyyy-MM-dd')
+      const formattedToday: string = format(toZonedTime(today, tz), 'yyyy-MM-dd')
       const todaysGames: Game[] = await this.getGamesOnDay(team, today)
 
-      this.logger.log({ date: formattedDate, team, tz }, `Searching for a live game...`)
-
       if (todaysGames.length === 0) {
-        this.logger.warn({ date: formattedDate, team }, 'No scheduled games today')
+        this.logger.warn({ date: formattedToday, team }, `No scheduled games today for ${team}`)
 
-        throw new NoLiveGameException('No scheduled games today', { date: formattedDate, team })
+        throw new NoLiveGameException('No scheduled games today', { date: formattedToday, team })
       }
 
       const liveGame: Game | undefined = todaysGames.find((game) => game.mediaState === 'MEDIA_ON')
 
-      this.logger.debug({ date: formattedDate, team, ...liveGame }, `Found ${liveGame ? 'live' : 'no live'} game`)
-
       if (!liveGame) {
-        this.logger.warn({ date: formattedDate, team }, 'No live game found')
-        throw new NoLiveGameException('No live game found', { date: formattedDate, team })
+        this.logger.warn({ date: formattedToday, team }, `No live game found for ${team}`)
+
+        throw new NoLiveGameException('No live game found', { date: formattedToday, team })
       }
+
+      this.logger.log({ date: formattedToday, game: liveGame, team }, `Got live game for ${team}`)
 
       return liveGame
     } catch (cause) {
