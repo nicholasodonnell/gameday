@@ -5,6 +5,7 @@ import { join } from 'path'
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 import { NestFactory, Reflector } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import hbs from 'hbs'
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino'
 
 import { AppModule } from '@/app.module'
@@ -35,6 +36,9 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '../../', 'public'))
   app.setBaseViewsDir(join(__dirname, '../../', 'views'))
   app.setViewEngine('hbs')
+
+  // Register Handlebars helper
+  hbs.registerHelper('lowercase', (str: string) => str.toLowerCase())
 
   await app.listen(3000, '0.0.0.0')
 }

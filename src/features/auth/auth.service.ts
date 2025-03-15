@@ -32,8 +32,6 @@ export class AuthService {
   }
 
   public async createToken(): Promise<Token> {
-    this.logger.log(`Generating new MLB auth token...`)
-
     try {
       const username = this.config.getOrThrow<string>('MLB_USERNAME')
       const password = this.config.getOrThrow<string>('MLB_PASSWORD')
@@ -47,7 +45,7 @@ export class AuthService {
         id: access_token,
       })
 
-      this.logger.debug({ ...token }, `Created new auth token`)
+      this.logger.debug({ token }, `Created new auth token`)
 
       return {
         expires: token.expires_at,
@@ -83,7 +81,7 @@ export class AuthService {
         return null
       }
 
-      this.logger.debug({ ...token }, `Using existing auth token`)
+      this.logger.debug({ token }, `Using existing auth token`)
 
       return {
         expires: token.expires_at,
