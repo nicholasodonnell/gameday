@@ -23,7 +23,7 @@ export class PlaylistController {
     return
   }
 
-  @Get('/playlist/logo/:team.png')
+  @Get('playlist/logo/:team.png')
   @Header('Content-Type', 'image/png')
   public async getTeamLogo(@Param('team') team: Team): Promise<StreamableFile> {
     try {
