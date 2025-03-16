@@ -12,12 +12,7 @@ export class ErrorInterceptor implements NestInterceptor {
     return e.cause instanceof Error ? this.getStatusCode(e.cause) : 500
   }
 
-  private getStatusMessage(e: Error, statusCode: number): Record<string, any> | string {
-    // eslint-disable-next-line no-process-env
-    if (process.env.NODE_ENV === 'production' && statusCode >= 500) {
-      return `An unexpected error occurred`
-    }
-
+  private getStatusMessage(e: Error): Record<string, any> | string {
     if (e instanceof HttpException) {
       return e.getResponse()
     }
@@ -29,7 +24,7 @@ export class ErrorInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((err) => {
         const statusCode = this.getStatusCode(err)
-        const message = this.getStatusMessage(err, statusCode)
+        const message = this.getStatusMessage(err)
 
         return throwError(() => new HttpException(message, statusCode))
       }),

@@ -6,6 +6,7 @@ import { toZonedTime } from 'date-fns-tz'
 import { Game, GameException, NoLiveGameException } from './types'
 
 import { Epg, MastApiService, VideoFeed } from '@/clients/mastapi'
+import { ApplicationException } from '@/common/errors'
 import { Team, TeamId, TeamName, TeamNotFoundException } from '@/features/team'
 
 @Injectable()
@@ -68,6 +69,10 @@ export class GameService {
         }, []) ?? []
       )
     } catch (cause) {
+      if (cause instanceof ApplicationException) {
+        throw cause
+      }
+
       throw new GameException('Failed to get games', { cause, endDate, startDate, team })
     }
   }
@@ -101,7 +106,7 @@ export class GameService {
 
       return liveGame
     } catch (cause) {
-      if (cause instanceof GameException) {
+      if (cause instanceof ApplicationException) {
         throw cause
       }
 
