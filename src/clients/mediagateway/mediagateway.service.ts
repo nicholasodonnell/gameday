@@ -14,7 +14,7 @@ export class MediaGatewayService {
 
   constructor(private readonly config: ConfigService) {
     this.client = axios.create({
-      baseURL: this.config.getOrThrow<string>('MEDIA_GATEWAY_URL'),
+      baseURL: this.config.getOrThrow<string>('MLB_MEDIA_GATEWAY_URL'),
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:87.0) Gecko/20100101 Firefox/87.0',
         'x-client-name': 'WEB',
