@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 
-import { GameService } from './game.service'
-
 import { MastApiModule } from '@/clients/mastapi'
+
+import { GameService } from './game.service'
 
 @Module({
   exports: [GameService],

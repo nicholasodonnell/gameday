@@ -1,13 +1,13 @@
 import { Injectable, StreamableFile } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { PlaylistTemplateConfig } from './types'
-
 import { AuthService, Token } from '@/features/auth'
 import { Game, GameService } from '@/features/game'
 import { Session, SessionService } from '@/features/session'
 import { Stream, StreamService } from '@/features/stream'
 import { Team, TeamService } from '@/features/team'
+
+import { PlaylistTemplateConfig } from './types'
 
 @Injectable()
 export class PlaylistService {
@@ -34,7 +34,7 @@ export class PlaylistService {
 
   public async getStreamForTeam(team: Team): Promise<string> {
     const game: Game = await this.game.getLiveGame(team)
-    const cachedStream: Stream | null = await this.stream.getCachedStream(game)
+    const cachedStream: null | Stream = await this.stream.getCachedStream(game)
 
     if (cachedStream) {
       return cachedStream.url

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 
-import { StreamService } from './stream.service'
-
 import { MediaGatewayModule } from '@/clients/mediagateway'
+
+import { StreamService } from './stream.service'
 
 @Module({
   exports: [StreamService],

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 
-import { TeamService } from './team.service'
-
 import { MlbStaticModule } from '@/clients/mlbstatic'
+
+import { TeamService } from './team.service'
 
 @Module({
   exports: [TeamService],

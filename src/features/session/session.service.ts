@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common'
 
-import { Session, SessionEntity, SessionException } from './types'
-
-import { Session as MLBSession, MediaGatewayService } from '@/clients/mediagateway'
+import { MediaGatewayService, Session as MLBSession } from '@/clients/mediagateway'
 import { Token } from '@/features/auth'
-import { InjectKnex, Knex } from '@/providers/knex'
+import { InjectKnex, type Knex } from '@/providers/knex'
+
+import { Session, SessionEntity, SessionException } from './types'
 
 @Injectable()
 export class SessionService {
@@ -14,29 +14,6 @@ export class SessionService {
     @InjectKnex() private readonly knex: Knex,
     private readonly mediaGateway: MediaGatewayService,
   ) {}
-
-  private async insertSession(data: Omit<SessionEntity, 'created_at'>): Promise<SessionEntity> {
-    try {
-      const [entity] = await this.knex<SessionEntity>('session')
-        .insert({
-          ...data,
-          created_at: new Date(),
-        })
-        .returning('*')
-
-      return entity
-    } catch (cause) {
-      throw new SessionException('Failed to insert session', { cause, ...data })
-    }
-  }
-
-  private async selectSessionByTokenId(tokenId: string): Promise<SessionEntity | undefined> {
-    try {
-      return await this.knex<SessionEntity>('session').select('*').where('token_id', tokenId).first()
-    } catch (cause) {
-      throw new SessionException('Failed to select session by token ID', { cause, tokenId })
-    }
-  }
 
   public async createSession(token: Token): Promise<Session> {
     try {
@@ -58,7 +35,7 @@ export class SessionService {
     }
   }
 
-  public async getSession(token: Token): Promise<Session | null> {
+  public async getSession(token: Token): Promise<null | Session> {
     try {
       const session: SessionEntity | undefined = await this.selectSessionByTokenId(token.id)
 
@@ -76,6 +53,29 @@ export class SessionService {
       }
     } catch (cause) {
       throw new SessionException('Failed to get session', { cause, token })
+    }
+  }
+
+  private async insertSession(data: Omit<SessionEntity, 'created_at'>): Promise<SessionEntity> {
+    try {
+      const [entity] = await this.knex<SessionEntity>('session')
+        .insert({
+          ...data,
+          created_at: new Date(),
+        })
+        .returning('*')
+
+      return entity
+    } catch (cause) {
+      throw new SessionException('Failed to insert session', { cause, ...data })
+    }
+  }
+
+  private async selectSessionByTokenId(tokenId: string): Promise<SessionEntity | undefined> {
+    try {
+      return await this.knex<SessionEntity>('session').select('*').where('token_id', tokenId).first()
+    } catch (cause) {
+      throw new SessionException('Failed to select session by token ID', { cause, tokenId })
     }
   }
 }

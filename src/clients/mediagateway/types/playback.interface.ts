@@ -1,10 +1,32 @@
+export interface InitPlaybackSessionDto {
+  accessToken: string
+  deviceId: string
+  mediaId: string
+  sessionId: string
+}
+
+export interface InitPlaybackSessionResponse {
+  data: {
+    initPlaybackSession: null | Playback
+  }
+  errors?: {
+    extensions: {
+      classification: string
+      code: string
+      executionId: string
+    }
+    location: string[]
+    message: string
+  }[]
+}
+
 export interface Playback {
   adExperience: {
-    adEngineIdentifiers: any[]
+    adEngineIdentifiers: unknown[]
     adExperienceTypes: string[]
     adsEnabled: boolean
   }
-  adScenarios: any[]
+  adScenarios: unknown[]
   heartbeatInfo: {
     interval: number
     url: string
@@ -36,26 +58,4 @@ export interface Playback {
     state: string
     userid: string
   }
-}
-
-export interface InitPlaybackSessionResponse {
-  data: {
-    initPlaybackSession: Playback | null
-  }
-  errors?: {
-    extensions: {
-      classification: string
-      code: string
-      executionId: string
-    }
-    location: string[]
-    message: string
-  }[]
-}
-
-export interface InitPlaybackSessionDto {
-  accessToken: string
-  deviceId: string
-  mediaId: string
-  sessionId: string
 }

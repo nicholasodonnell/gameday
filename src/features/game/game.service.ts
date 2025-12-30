@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config'
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 
-import { Game, GameException, NoLiveGameException } from './types'
-
 import { Epg, MastApiService, VideoFeed } from '@/clients/mastapi'
 import { ApplicationException } from '@/common/errors'
 import { Team, TeamId, TeamName, TeamNotFoundException } from '@/features/team'
+
+import { Game, GameException, NoLiveGameException } from './types'
 
 @Injectable()
 export class GameService {

@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import axios, { AxiosError } from 'axios'
 
-import { InitPlaybackSessionDto, InitPlaybackSessionResponse, InitSessionResponse, Playback, Session } from './types'
-
 import { ApplicationException } from '@/common/errors'
+
+import { InitPlaybackSessionDto, InitPlaybackSessionResponse, InitSessionResponse, Playback, Session } from './types'
 
 @Injectable()
 export class MediaGatewayService {

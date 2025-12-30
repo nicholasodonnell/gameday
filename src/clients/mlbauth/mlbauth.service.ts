@@ -4,15 +4,15 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import axios, { AxiosError } from 'axios'
 
-import { Grant } from './types'
-
 import { ApplicationException } from '@/common/errors'
+
+import { Grant } from './types'
 
 @Injectable()
 export class MlbAuthService {
-  private readonly CLIENT_ID = '0oa3e1nutA1HLzAKG356'
-
   private client: AxiosInstance
+
+  private readonly CLIENT_ID = '0oa3e1nutA1HLzAKG356'
 
   constructor(private readonly config: ConfigService) {
     this.client = axios.create({

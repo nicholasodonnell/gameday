@@ -1,3 +1,18 @@
+export interface InitSessionResponse {
+  data: {
+    initSession: null | Session
+  }
+  errors?: {
+    extensions: {
+      classification: string
+      code: string
+      executionId: string
+    }
+    location: string[]
+    message: string
+  }[]
+}
+
 export interface Session {
   clientExperience: string
   deviceId: string
@@ -13,19 +28,4 @@ export interface Session {
     zipCode: string
   }
   sessionId: string
-}
-
-export interface InitSessionResponse {
-  data: {
-    initSession: Session | null
-  }
-  errors?: {
-    extensions: {
-      classification: string
-      code: string
-      executionId: string
-    }
-    location: string[]
-    message: string
-  }[]
 }

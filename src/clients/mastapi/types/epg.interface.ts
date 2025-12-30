@@ -1,3 +1,14 @@
+export interface AudioFeed {
+  callLetters: string
+  contentId: string
+  entitled: boolean
+  language: string
+  mediaFeedSubType: string
+  mediaId: string
+  mediaState: string
+  type: string
+}
+
 export interface Epg {
   audioFeeds: AudioFeed[]
   blackedOutVideo: boolean
@@ -8,37 +19,6 @@ export interface Epg {
   prePostShows: PrePostShows
   videoFeeds: VideoFeed[]
   videoStatusCodes: number[]
-}
-
-export interface VideoFeed {
-  abcAuthRequired: boolean
-  blackedOut: boolean
-  callLetters: string
-  contentId: string
-  entitled: boolean
-  espn2AuthRequired: boolean
-  espnAuthRequired: boolean
-  foxAuthRequired: boolean
-  freeGame: boolean
-  fs1AuthRequired: boolean
-  inMarket: boolean
-  mediaFeedSubType: string
-  mediaFeedType: string
-  mediaId: string
-  mediaState: string
-  mlbnAuthRequired: boolean
-  tbsAuthRequired: boolean
-}
-
-export interface AudioFeed {
-  callLetters: string
-  contentId: string
-  entitled: boolean
-  language: string
-  mediaFeedSubType: string
-  mediaId: string
-  mediaState: string
-  type: string
 }
 
 export interface GameData {
@@ -80,6 +60,33 @@ export interface GameData {
   venueId: number
 }
 
+export interface Hero {
+  live: boolean
+}
+
+export interface PreGamePostGame {
+  hasShow: boolean
+  startTime?: string
+}
+
+export interface PrePostShows {
+  away: ShowDetails
+  home: ShowDetails
+}
+
+export interface SearchEpgResponse {
+  featured: unknown[]
+  hero: Hero
+  results: Epg[]
+}
+
+export interface ShowDetails {
+  contentId: string
+  postGame: PreGamePostGame
+  preGame: PreGamePostGame
+  streamState: string
+}
+
 export interface Team {
   losses: number
   probablePitcherEra: string
@@ -95,29 +102,22 @@ export interface Team {
   wins: number
 }
 
-export interface PrePostShows {
-  away: ShowDetails
-  home: ShowDetails
-}
-
-export interface ShowDetails {
+export interface VideoFeed {
+  abcAuthRequired: boolean
+  blackedOut: boolean
+  callLetters: string
   contentId: string
-  postGame: PreGamePostGame
-  preGame: PreGamePostGame
-  streamState: string
-}
-
-export interface PreGamePostGame {
-  hasShow: boolean
-  startTime?: string
-}
-
-export interface Hero {
-  live: boolean
-}
-
-export interface SearchEpgResponse {
-  featured: any[]
-  hero: Hero
-  results: Epg[]
+  entitled: boolean
+  espn2AuthRequired: boolean
+  espnAuthRequired: boolean
+  foxAuthRequired: boolean
+  freeGame: boolean
+  fs1AuthRequired: boolean
+  inMarket: boolean
+  mediaFeedSubType: string
+  mediaFeedType: string
+  mediaId: string
+  mediaState: string
+  mlbnAuthRequired: boolean
+  tbsAuthRequired: boolean
 }

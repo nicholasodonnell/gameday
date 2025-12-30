@@ -5,10 +5,10 @@ import { ConfigService } from '@nestjs/config'
 import axios, { AxiosError } from 'axios'
 import { format } from 'date-fns'
 
-import { Epg, SearchEpgResponse } from './types'
-
 import { ApplicationException } from '@/common/errors'
 import { TeamId } from '@/features/team/types'
+
+import { Epg, SearchEpgResponse } from './types'
 
 @Injectable()
 export class MastApiService {

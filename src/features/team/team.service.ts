@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 
-import { Team, TeamId, TeamNotFoundException } from './types'
-
 import { MlbStaticService } from '@/clients/mlbstatic'
+
+import { Team, TeamId, TeamNotFoundException } from './types'
 
 @Injectable()
 export class TeamService {

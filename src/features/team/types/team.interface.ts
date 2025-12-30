@@ -1,4 +1,4 @@
-export enum TeamId {
+export enum TeamCode {
   ARI = '109',
   ATL = '144',
   BAL = '110',
@@ -31,9 +31,7 @@ export enum TeamId {
   WAS = '120',
 }
 
-export type Team = keyof typeof TeamId
-
-export enum TeamCode {
+export enum TeamId {
   ARI = '109',
   ATL = '144',
   BAL = '110',
@@ -99,3 +97,5 @@ export enum TeamName {
   TOR = 'Toronto Blue Jays',
   WAS = 'Washington Nationals',
 }
+
+export type Team = keyof typeof TeamId
