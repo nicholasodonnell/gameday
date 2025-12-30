@@ -5,7 +5,6 @@ import { Provider } from '@nestjs/common/interfaces'
 import { knex } from 'knex'
 
 import knexFile from '../../../knexfile'
-
 import { KNEX_TOKEN } from './knex.constants'
 import { InjectKnex } from './knex.decorator'
 

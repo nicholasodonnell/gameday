@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 
-import { CleanupService } from './cleanup.service'
-
 import { AuthModule } from '@/features/auth'
 import { StreamModule } from '@/features/stream'
+
+import { CleanupService } from './cleanup.service'
 
 @Module({
   exports: [CleanupService],

@@ -1,10 +1,10 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { AuthException, Token, TokenEntity } from './types'
-
 import { Grant, MlbAuthService } from '@/clients/mlbauth'
-import { InjectKnex, Knex } from '@/providers/knex'
+import { InjectKnex, type Knex } from '@/providers/knex'
+
+import { AuthException, Token, TokenEntity } from './types'
 
 @Injectable()
 export class AuthService {
@@ -15,21 +15,6 @@ export class AuthService {
     @InjectKnex() private readonly knex: Knex,
     private readonly mlbAuth: MlbAuthService,
   ) {}
-
-  private async insertToken(data: Omit<TokenEntity, 'created_at'>): Promise<TokenEntity> {
-    const [entity] = await this.knex<TokenEntity>('token')
-      .insert({
-        ...data,
-        created_at: new Date(),
-      })
-      .returning('*')
-
-    return entity
-  }
-
-  private async selectActiveToken(): Promise<TokenEntity | undefined> {
-    return await this.knex<TokenEntity>('token').select('*').where('expires_at', '>', new Date().valueOf()).first()
-  }
 
   public async createToken(): Promise<Token> {
     try {
@@ -71,7 +56,7 @@ export class AuthService {
     }
   }
 
-  public async getToken(): Promise<Token | null> {
+  public async getToken(): Promise<null | Token> {
     try {
       const token: TokenEntity | undefined = await this.selectActiveToken()
 
@@ -90,5 +75,20 @@ export class AuthService {
     } catch (cause) {
       throw new AuthException('Failed to get auth token', { cause })
     }
+  }
+
+  private async insertToken(data: Omit<TokenEntity, 'created_at'>): Promise<TokenEntity> {
+    const [entity] = await this.knex<TokenEntity>('token')
+      .insert({
+        ...data,
+        created_at: new Date(),
+      })
+      .returning('*')
+
+    return entity
+  }
+
+  private async selectActiveToken(): Promise<TokenEntity | undefined> {
+    return await this.knex<TokenEntity>('token').select('*').where('expires_at', '>', new Date().valueOf()).first()
   }
 }

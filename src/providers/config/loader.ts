@@ -1,5 +1,3 @@
-/* eslint-disable no-process-env */
-
 export const loader = () => ({
   APP_URL: process.env.APP_URL ?? 'http://localhost:3000',
   BITRATE: process.env.BITRATE ?? '5600',

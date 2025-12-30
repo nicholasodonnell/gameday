@@ -12,9 +12,9 @@ import { CleanupModule } from '@/tasks/cleanup'
 @Module({
   imports: [
     // providers
-    ConfigModule,
+    ConfigModule.forRootAsync(),
     KnexModule.forRoot(),
-    LoggerModule,
+    LoggerModule.forRoot(),
     ScheduleModule.forRoot(),
 
     // http

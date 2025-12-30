@@ -1,5 +1,5 @@
 import { Controller, Get, HttpException, Res } from '@nestjs/common'
-import { Response } from 'express'
+import { type Response } from 'express'
 
 import { GuideService } from './guide.service'
 import { GuideTemplate } from './types'

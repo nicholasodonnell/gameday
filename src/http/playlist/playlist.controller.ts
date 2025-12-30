@@ -1,12 +1,12 @@
 import { Controller, Get, Header, HttpException, NotFoundException, Param, Res, StreamableFile } from '@nestjs/common'
-import { Response } from 'express'
-
-import { PlaylistService } from './playlist.service'
-import { PlaylistTemplateConfig } from './types'
+import { type Response } from 'express'
 
 import { NoLiveGameException } from '@/features/game'
 import { BlackedOutException } from '@/features/stream'
-import { Team, TeamNotFoundException } from '@/features/team/types'
+import { type Team, TeamNotFoundException } from '@/features/team/types'
+
+import { PlaylistService } from './playlist.service'
+import { PlaylistTemplateConfig } from './types'
 
 @Controller()
 export class PlaylistController {

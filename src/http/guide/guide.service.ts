@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { format } from 'date-fns-tz'
 
-import { GuideTemplate, Program } from './types'
-
 import { Game, GameService } from '@/features/game'
 import { Team, TeamId } from '@/features/team'
+
+import { GuideTemplate, Program } from './types'
 
 @Injectable()
 export class GuideService {

@@ -1,10 +1,10 @@
 export type ApplicationExceptionOptions = {
-  [key: string]: any
-  cause?: any
+  [key: string]: unknown
+  cause?: unknown
 }
 
 export class ApplicationException extends Error {
-  public readonly meta: Record<string, any>
+  public readonly meta: Record<string, unknown>
 
   constructor(message: string, { cause, ...meta }: ApplicationExceptionOptions = {}) {
     super(message, { cause })
@@ -23,7 +23,7 @@ export class ApplicationException extends Error {
     return this.message
   }
 
-  public getMeta(): Record<string, any> {
+  public getMeta(): Record<string, unknown> {
     return this.meta
   }
 }

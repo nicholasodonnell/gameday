@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 
+import { GameModule } from '@/features/game'
+
 import { GuideController } from './guide.controller'
 import { GuideService } from './guide.service'
-
-import { GameModule } from '@/features/game'
 
 @Module({
   controllers: [GuideController],
