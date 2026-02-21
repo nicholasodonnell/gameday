@@ -54,7 +54,7 @@ export class GameService {
           const epgGames = targetVideoFeeds.map<Game>((videoFeed) => ({
             approximateEndDate,
             blackedOut: videoFeed.blackedOut,
-            description: `${TeamName[awayTeam]} take on ${TeamName[homeTeam]} with first pitch at ${format(zonedStartDate, 'h:mm a')}`,
+            description: `${TeamName[awayTeam] ?? '?'} at ${TeamName[homeTeam] ?? '?'} with first pitch at ${format(zonedStartDate, 'h:mm a')}`,
             freeGame: videoFeed.freeGame,
             mediaFeedType: videoFeed.mediaFeedType as Game['mediaFeedType'],
             mediaId: videoFeed.mediaId,
@@ -62,7 +62,7 @@ export class GameService {
             opponent,
             startDate,
             team,
-            title: `${TeamName[team]} vs. ${TeamName[opponent]} (${format(zonedStartDate, 'MMM d h:mm a')})`,
+            title: `${TeamName[team] ?? '?'} vs. ${TeamName[opponent] ?? '?'} (${format(zonedStartDate, 'MMM d h:mm a')})`,
           }))
 
           return [...games, ...epgGames]
