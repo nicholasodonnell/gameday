@@ -1,6 +1,7 @@
 import { Controller, Get, Header, HttpException, NotFoundException, Param, Res, StreamableFile } from '@nestjs/common'
 import { type Response } from 'express'
 
+import { UppercasePipe } from '@/common/pipes'
 import { NoLiveGameException } from '@/features/game'
 import { BlackedOutException } from '@/features/stream'
 import { type Team, TeamNotFoundException } from '@/features/team/types'
@@ -25,7 +26,7 @@ export class PlaylistController {
 
   @Get('playlist/logo/:team.png')
   @Header('Content-Type', 'image/png')
-  public async getTeamLogo(@Param('team') team: Team): Promise<StreamableFile> {
+  public async getTeamLogo(@Param('team', UppercasePipe) team: Team): Promise<StreamableFile> {
     try {
       return await this.playlist.getLogoForTeam(team)
     } catch (cause) {
@@ -38,7 +39,7 @@ export class PlaylistController {
   }
 
   @Get('playlist/:team.m3u8')
-  public async getTeamPlaylist(@Param('team') team: Team, @Res() res: Response): Promise<void> {
+  public async getTeamPlaylist(@Param('team', UppercasePipe) team: Team, @Res() res: Response): Promise<void> {
     try {
       const stream = await this.playlist.getStreamForTeam(team)
 
