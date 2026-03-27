@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { format } from 'date-fns'
+import { add, format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 
 import { Epg, MastApiService, VideoFeed } from '@/clients/mastapi'
@@ -48,7 +48,7 @@ export class GameService {
           const awayTeam = Object.keys(TeamId)[Object.values(TeamId).indexOf(awayTeamId)] as Team
           const opponent: Team = team === homeTeam ? awayTeam : homeTeam
           const startDate: Date = new Date(gameData.gameDate)
-          const approximateEndDate: Date = new Date(startDate.valueOf() + 3 * 60 * 60 * 1000) // start date + 3 hours
+          const approximateEndDate: Date = add(startDate, { hours: 2, minutes: 40 }) // start date + 2 hours 40 minutes (average MLB game length)
           const zonedStartDate: Date = toZonedTime(startDate, tz)
 
           const epgGames = targetVideoFeeds.map<Game>((videoFeed) => ({
