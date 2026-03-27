@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { add, sub } from 'date-fns'
 import { format } from 'date-fns-tz'
 
 import { Game, GameService } from '@/features/game'
@@ -19,7 +20,7 @@ export class GuideService {
     const TZ: string = this.config.getOrThrow<string>('TZ')
     const teams = Object.keys(TeamId) as Team[]
     const today: Date = new Date(Date.now())
-    const sevenDaysFromNow: Date = new Date(today.valueOf() + 7 * 24 * 60 * 60 * 1000)
+    const sevenDaysFromNow: Date = add(today, { days: 7 })
 
     const programs: Program[] = (
       await Promise.all<Program[]>(
@@ -27,18 +28,14 @@ export class GuideService {
           const games: Game[] = await this.game.getGamesInRange(team, today, sevenDaysFromNow)
 
           return games.map<Program>((game: Game) => {
-            const startDate: Date = new Date(game.startDate.valueOf() - 60 * 60 * 1000) // start date - 1 hour
-            const stopDate: Date = new Date(game.approximateEndDate.valueOf() + 60 * 60 * 1000) // end date + 1 hour
-            const formattedStartDate: string = format(startDate, 'yyyyMMddHHmmss XXX', { timeZone: TZ }).replace(
-              /:/g,
-              '',
-            )
-            const formattedStopDate: string = format(stopDate, 'yyyyMMddHHmmss XXX', { timeZone: TZ }).replace(/:/g, '')
+            // buffer of 30 minutes before and after the game to account for pre-game and post-game content
+            const programStartDate: Date = sub(game.startDate, { minutes: 30 })
+            const programStopDate: Date = add(game.approximateEndDate, { minutes: 30 })
 
             return {
               game,
-              start: formattedStartDate,
-              stop: formattedStopDate,
+              start: format(programStartDate, 'yyyyMMddHHmmss XXX', { timeZone: TZ }).replace(/:/g, ''),
+              stop: format(programStopDate, 'yyyyMMddHHmmss XXX', { timeZone: TZ }).replace(/:/g, ''),
               team,
             }
           })
